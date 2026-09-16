@@ -286,6 +286,7 @@ func ValidateShootUpdate(newShoot, oldShoot *core.Shoot) field.ErrorList {
 	allErrs = append(allErrs, ValidateShootHAConfigUpdate(newShoot, oldShoot)...)
 	allErrs = append(allErrs, validateHibernationUpdate(newShoot, oldShoot)...)
 	allErrs = append(allErrs, ValidateForceDeletion(newShoot, oldShoot)...)
+	allErrs = append(allErrs, ValidateBackupEncryptionRemoval(newShoot, oldShoot)...)
 	allErrs = append(allErrs, validateNodeLocalDNSUpdate(&newShoot.Spec, &oldShoot.Spec, field.NewPath("spec"))...)
 	allErrs = append(allErrs, ValidateInPlaceUpdates(newShoot, oldShoot)...)
 
@@ -3471,6 +3472,30 @@ func ValidateForceDeletion(newShoot, oldShoot *core.Shoot) field.ErrorList {
 		}
 		if !errorCodePresent {
 			allErrs = append(allErrs, field.Forbidden(fldPath, fmt.Sprintf("force-deletion annotation cannot be set when Shoot status does not contain one of these error codes: %v", sets.List(errorCodesAllowingForceDeletion))))
+		}
+	}
+
+	return allErrs
+}
+
+// ValidateBackupEncryptionRemoval validates that backup encryption is not removed
+// from a Shoot unless the confirmation annotation is present.
+func ValidateBackupEncryptionRemoval(newShoot, oldShoot *core.Shoot) field.ErrorList {
+	allErrs := field.ErrorList{}
+
+	var oldBackupEncryption, newBackupEncryption *core.BackupEncryptionConfig
+	if oldShoot.Spec.Kubernetes.ETCD != nil && oldShoot.Spec.Kubernetes.ETCD.Main != nil {
+		oldBackupEncryption = oldShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption
+	}
+	if newShoot.Spec.Kubernetes.ETCD != nil && newShoot.Spec.Kubernetes.ETCD.Main != nil {
+		newBackupEncryption = newShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption
+	}
+
+	if oldBackupEncryption != nil && newBackupEncryption == nil {
+		fldPath := field.NewPath("spec", "kubernetes", "etcd", "main", "backupEncryption")
+		annotationValue, hasAnnotation := newShoot.Annotations[v1beta1constants.AnnotationShootForceRemoveBackupEncryption]
+		if !hasAnnotation || annotationValue != "true" {
+			allErrs = append(allErrs, field.Forbidden(fldPath, fmt.Sprintf("cannot remove backup encryption configuration without acknowledging the risk of losing access to existing encrypted backups; set the %q annotation to %q to proceed", v1beta1constants.AnnotationShootForceRemoveBackupEncryption, "true")))
 		}
 	}
 

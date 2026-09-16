@@ -584,11 +584,76 @@ var _ = Describe("Shoot Validation Tests", func() {
 					},
 				}
 
-				Expect(ValidateForceDeletion(newShoot, shoot)).To(BeEmpty())
-			})
+			Expect(ValidateForceDeletion(newShoot, shoot)).To(BeEmpty())
+		})
+	})
+
+	Context("#ValidateBackupEncryptionRemoval", func() {
+		BeforeEach(func() {
+			shoot.Spec.Kubernetes.ETCD = &core.ETCD{
+				Main: &core.ETCDConfig{
+					BackupEncryption: &core.BackupEncryptionConfig{
+						Provider: core.EncryptionProvider{
+							Type: ptr.To(core.EncryptionProviderTypeAESGCM),
+						},
+					},
+				},
+			}
 		})
 
-		Context("exposure class", func() {
+		It("should forbid removing backup encryption without the annotation", func() {
+			newShoot := prepareShootForUpdate(shoot)
+			newShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption = nil
+
+			Expect(ValidateBackupEncryptionRemoval(newShoot, shoot)).To(ConsistOf(
+				PointTo(MatchFields(IgnoreExtras, Fields{
+					"Type":  Equal(field.ErrorTypeForbidden),
+					"Field": Equal("spec.kubernetes.etcd.main.backupEncryption"),
+				})),
+			))
+		})
+
+		It("should allow removing backup encryption with the annotation set to true", func() {
+			newShoot := prepareShootForUpdate(shoot)
+			newShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption = nil
+			metav1.SetMetaDataAnnotation(&newShoot.ObjectMeta, v1beta1constants.AnnotationShootForceRemoveBackupEncryption, "true")
+
+			Expect(ValidateBackupEncryptionRemoval(newShoot, shoot)).To(BeEmpty())
+		})
+
+		It("should forbid removing backup encryption with the annotation set to a non-true value", func() {
+			newShoot := prepareShootForUpdate(shoot)
+			newShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption = nil
+			metav1.SetMetaDataAnnotation(&newShoot.ObjectMeta, v1beta1constants.AnnotationShootForceRemoveBackupEncryption, "false")
+
+			Expect(ValidateBackupEncryptionRemoval(newShoot, shoot)).To(ConsistOf(
+				PointTo(MatchFields(IgnoreExtras, Fields{
+					"Type":  Equal(field.ErrorTypeForbidden),
+					"Field": Equal("spec.kubernetes.etcd.main.backupEncryption"),
+				})),
+			))
+		})
+
+		It("should allow keeping backup encryption", func() {
+			newShoot := prepareShootForUpdate(shoot)
+
+			Expect(ValidateBackupEncryptionRemoval(newShoot, shoot)).To(BeEmpty())
+		})
+
+		It("should allow adding backup encryption", func() {
+			shoot.Spec.Kubernetes.ETCD.Main.BackupEncryption = nil
+			newShoot := prepareShootForUpdate(shoot)
+			newShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption = &core.BackupEncryptionConfig{
+				Provider: core.EncryptionProvider{
+					Type: ptr.To(core.EncryptionProviderTypeAESGCM),
+				},
+			}
+
+			Expect(ValidateBackupEncryptionRemoval(newShoot, shoot)).To(BeEmpty())
+		})
+	})
+
+	Context("exposure class", func() {
 			It("should forbid invalid exposure class names", func() {
 				shoot.Spec.ExposureClassName = ptr.To("$invalid.class.[]name{}/")
 				errorList := ValidateShoot(shoot)

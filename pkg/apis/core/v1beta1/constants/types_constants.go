@@ -741,6 +741,9 @@ const (
 	// AnnotationConfirmationForceDeletion is a constant for an annotation on a Shoot resource whose value must be set to "true" in order to
 	// trigger force-deletion of the cluster. It can only be set if the Shoot has a deletion timestamp and contains an ErrorCode in the Shoot Status.
 	AnnotationConfirmationForceDeletion = "confirmation.gardener.cloud/force-deletion"
+	// AnnotationShootForceRemoveBackupEncryption is a constant for an annotation on a Shoot resource whose value must be set to "true" in order to
+	// remove the backup encryption configuration. Removing backup encryption means that existing encrypted backups can no longer be restored.
+	AnnotationShootForceRemoveBackupEncryption = "shoot.gardener.cloud/force-remove-backup-encryption"
 	// AnnotationShootIgnoreAlerts is the key for an annotation of a Shoot cluster whose value indicates
 	// if alerts for this cluster should be ignored
 	AnnotationShootIgnoreAlerts = "shoot.gardener.cloud/ignore-alerts"
