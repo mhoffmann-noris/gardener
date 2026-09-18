@@ -87,7 +87,7 @@ func GetETCDEncryptionKeyRotationPhase(credentials *operatorv1alpha1.Credentials
 // be auto completed after the preparation phase has finished.
 //
 // Deprecated: This function will be removed in a future release. The function will be no longer needed with
-// the removal `rotate-etcd-encryption-key-start` & `rotate-etcd-encryption-key-complete` annotations.
+// the removal `rotate-etcd-backup-encryption-key-start` & `rotate-etcd-backup-encryption-key-complete` annotations.
 // TODO(AleksandarSavchev): Remove this after support for Kubernetes v1.33 is dropped.
 func ShouldETCDEncryptionKeyRotationBeAutoCompleteAfterPrepared(credentials *operatorv1alpha1.Credentials) bool {
 	return credentials != nil &&

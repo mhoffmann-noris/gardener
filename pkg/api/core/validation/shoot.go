@@ -3208,7 +3208,7 @@ func validateShootOperation(operations, maintenanceOperations []string, shoot *c
 
 	for _, op := range operations {
 		if forbiddenETCDEncryptionKeyShootOperationsWithK8s134.Has(op) && !k8sLess134 {
-			allErrs = append(allErrs, field.Forbidden(fldPathOp, fmt.Sprintf("for Kubernetes versions >= 1.34, operation '%s' is no longer supported, please use 'rotate-etcd-encryption-key' instead, which performs a complete etcd encryption key rotation", op)))
+			allErrs = append(allErrs, field.Forbidden(fldPathOp, fmt.Sprintf("for Kubernetes versions >= 1.34, operation '%s' is no longer supported, please use 'rotate-etcd-backup-encryption-key' instead, which performs a complete etcd encryption key rotation", op)))
 		}
 		if forbiddenOps, ok := incompatibleShootOperations[op]; ok && operationsSet.HasAny(forbiddenOps...) {
 			allErrs = append(allErrs, field.Forbidden(fldPathOp, fmt.Sprintf("operation '%s' is not permitted to be run together with %s operations", op, strings.Join(forbiddenOps, ", "))))
@@ -3225,7 +3225,7 @@ func validateShootOperation(operations, maintenanceOperations []string, shoot *c
 
 	for _, op := range maintenanceOperations {
 		if forbiddenETCDEncryptionKeyShootOperationsWithK8s134.Has(op) && !k8sLess134 {
-			allErrs = append(allErrs, field.Forbidden(fldPathOp, fmt.Sprintf("for Kubernetes versions >= 1.34, operation '%s' is no longer supported, please use 'rotate-etcd-encryption-key' instead, which performs a complete etcd encryption key rotation", op)))
+			allErrs = append(allErrs, field.Forbidden(fldPathOp, fmt.Sprintf("for Kubernetes versions >= 1.34, operation '%s' is no longer supported, please use 'rotate-etcd-backup-encryption-key' instead, which performs a complete etcd encryption key rotation", op)))
 		}
 		if forbiddenOps, ok := incompatibleShootOperations[op]; ok && maintenanceOperationsSet.HasAny(forbiddenOps...) {
 			allErrs = append(allErrs, field.Forbidden(fldPathMaintOp, fmt.Sprintf("operation '%s' is not permitted to be run together with %s maintenance operations", op, strings.Join(forbiddenOps, ", "))))

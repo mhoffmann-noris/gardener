@@ -445,19 +445,19 @@ const (
 	OperationRotateServiceAccountKeyComplete = "rotate-serviceaccount-key-complete"
 	// OperationRotateETCDEncryptionKey is a constant for an annotation on a Shoot indicating that the
 	// rotation of the ETCD encryption key shall be performed.
-	OperationRotateETCDEncryptionKey = "rotate-etcd-encryption-key"
+	OperationRotateETCDEncryptionKey = "rotate-etcd-backup-encryption-key"
 	// OperationRotateETCDEncryptionKeyStart is a constant for an annotation on a Shoot indicating that the
 	// rotation of the ETCD encryption key shall be started.
 	//
-	// Deprecated: This annotation is deprecated in favour of `rotate-etcd-encryption-key`, which does a full rotation.
+	// Deprecated: This annotation is deprecated in favour of `rotate-etcd-backup-encryption-key`, which does a full rotation.
 	// TODO(AleksandarSavchev): Remove this after support for Kubernetes v1.33 is dropped.
-	OperationRotateETCDEncryptionKeyStart = "rotate-etcd-encryption-key-start"
+	OperationRotateETCDEncryptionKeyStart = "rotate-etcd-backup-encryption-key-start"
 	// OperationRotateETCDEncryptionKeyComplete is a constant for an annotation on a Shoot indicating that the
 	// rotation of the ETCD encryption key shall be completed.
 	//
-	// Deprecated: This annotation is deprecated in favour of `rotate-etcd-encryption-key`, which does a full rotation.
+	// Deprecated: This annotation is deprecated in favour of `rotate-etcd-backup-encryption-key`, which does a full rotation.
 	// TODO(AleksandarSavchev): Remove this after support for Kubernetes v1.33 is dropped.
-	OperationRotateETCDEncryptionKeyComplete = "rotate-etcd-encryption-key-complete"
+	OperationRotateETCDEncryptionKeyComplete = "rotate-etcd-backup-encryption-key-complete"
 	// OperationRotateRolloutWorkers is a constant for an annotation triggering the rollout of one or more worker pools
 	// (comma-separated) when the certificate authorities or service account signing key credentials rotation is in
 	// WaitingForWorkersRollout phase.

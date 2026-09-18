@@ -257,18 +257,18 @@ var _ = Describe("Warnings", func() {
 			Expect(GetWarnings(ctx, shoot, nil, credentialsRotationInterval)).To(ContainElement(Equal("you are setting the spec.kubernetes.clusterAutoscaler.maxEmptyBulkDelete field. The field has been deprecated and is forbidden to be set starting from Kubernetes 1.33. The value is not used and will be set to nil. Instead, use the spec.kubernetes.clusterAutoscaler.maxScaleDownParallelism field.")))
 		})
 
-		It("should warn when rotate-etcd-encryption-key-start operation annotation is set", func() {
+		It("should warn when rotate-etcd-backup-encryption-key-start operation annotation is set", func() {
 			shoot.Annotations = map[string]string{
-				"gardener.cloud/operation": "rotate-etcd-encryption-key-start",
+				"gardener.cloud/operation": "rotate-etcd-backup-encryption-key-start",
 			}
-			Expect(GetWarnings(ctx, shoot, nil, credentialsRotationInterval)).To(ContainElement(Equal("you are setting the operation annotation to rotate-etcd-encryption-key-start. This annotation has been deprecated and is forbidden to be set starting from Kubernetes 1.34. Instead, use the rotate-etcd-encryption-key annotation, which performs a full rotation of the ETCD encryption key.")))
+			Expect(GetWarnings(ctx, shoot, nil, credentialsRotationInterval)).To(ContainElement(Equal("you are setting the operation annotation to rotate-etcd-backup-encryption-key-start. This annotation has been deprecated and is forbidden to be set starting from Kubernetes 1.34. Instead, use the rotate-etcd-backup-encryption-key annotation, which performs a full rotation of the ETCD encryption key.")))
 		})
 
-		It("should warn when rotate-etcd-encryption-key-complete operation annotation is set", func() {
+		It("should warn when rotate-etcd-backup-encryption-key-complete operation annotation is set", func() {
 			shoot.Annotations = map[string]string{
-				"gardener.cloud/operation": "rotate-etcd-encryption-key-complete",
+				"gardener.cloud/operation": "rotate-etcd-backup-encryption-key-complete",
 			}
-			Expect(GetWarnings(ctx, shoot, nil, credentialsRotationInterval)).To(ContainElement(Equal("you are setting the operation annotation to rotate-etcd-encryption-key-complete. This annotation has been deprecated and is forbidden to be set starting from Kubernetes 1.34. Instead, use the rotate-etcd-encryption-key annotation, which performs a full rotation of the ETCD encryption key.")))
+			Expect(GetWarnings(ctx, shoot, nil, credentialsRotationInterval)).To(ContainElement(Equal("you are setting the operation annotation to rotate-etcd-backup-encryption-key-complete. This annotation has been deprecated and is forbidden to be set starting from Kubernetes 1.34. Instead, use the rotate-etcd-backup-encryption-key annotation, which performs a full rotation of the ETCD encryption key.")))
 		})
 
 		DescribeTable("spec.secretBindingName",

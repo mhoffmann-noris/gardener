@@ -85,9 +85,9 @@ List of operations that can run in parallel:
 - `rotate-credentials-start`
 - `rotate-credentials-start-without-workers-rollout`
 - `rotate-credentials-complete`
-- `rotate-etcd-encryption-key`
-- `rotate-etcd-encryption-key-start`
-- `rotate-etcd-encryption-key-complete`
+- `rotate-etcd-backup-encryption-key`
+- `rotate-etcd-backup-encryption-key-start`
+- `rotate-etcd-backup-encryption-key-complete`
 - `rotate-serviceaccount-key-start`
 - `rotate-serviceaccount-key-start-without-workers-rollout`
 - `rotate-serviceaccount-key-complete`

@@ -3923,7 +3923,7 @@ boolean
 </td>
 <td>
 <em>(Optional)</em>
-<p>AutoCompleteAfterPrepared indicates whether the current ETCD encryption key rotation should be auto completed after the preparation phase has finished.<br />Such rotation can be triggered by the `rotate-etcd-encryption-key` annotation.<br />This field is needed while we support two types of key rotations: two-operation and single operation rotation.<br />Deprecated: This field will be removed in a future release. The field will be no longer needed with<br />the removal `rotate-etcd-encryption-key-start` & `rotate-etcd-encryption-key-complete` annotations.</p>
+<p>AutoCompleteAfterPrepared indicates whether the current ETCD encryption key rotation should be auto completed after the preparation phase has finished.<br />Such rotation can be triggered by the `rotate-etcd-backup-encryption-key` annotation.<br />This field is needed while we support two types of key rotations: two-operation and single operation rotation.<br />Deprecated: This field will be removed in a future release. The field will be no longer needed with<br />the removal `rotate-etcd-backup-encryption-key-start` & `rotate-etcd-backup-encryption-key-complete` annotations.</p>
 </td>
 </tr>
 

@@ -216,11 +216,11 @@ The `Completing` phase indicates stage three, and the `Completed` phase states t
 
 > You can check the `.status.credentials.rotation.etcdEncryptionKey` field in the `Shoot` to see when the rotation was last initiated, last completed, and in which phase it currently is.
 
-Manual rotation can be requested by annotating the `Shoot` with`gardener.cloud/operation=rotate-etcd-encryption-key`.
+Manual rotation can be requested by annotating the `Shoot` with`gardener.cloud/operation=rotate-etcd-backup-encryption-key`.
 This operation is not allowed for `Shoot`s that are already marked for deletion.
 
 ```bash
-kubectl -n <shoot-namespace> annotate shoot <shoot-name> gardener.cloud/operation=rotate-etcd-encryption-key
+kubectl -n <shoot-namespace> annotate shoot <shoot-name> gardener.cloud/operation=rotate-etcd-backup-encryption-key
 ```
 
 This will trigger a `Shoot` reconciliation and performs the stages one and two.

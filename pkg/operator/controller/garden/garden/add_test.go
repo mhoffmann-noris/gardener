@@ -78,16 +78,16 @@ var _ = Describe("Add", func() {
 
 			It("should return true when parallel operations differ in old and new object", func() {
 				gardenOld := garden.DeepCopy()
-				metav1.SetMetaDataAnnotation(&gardenOld.ObjectMeta, "gardener.cloud/operation", "rotate-etcd-encryption-key;rotate-ssh-keypair")
-				metav1.SetMetaDataAnnotation(&garden.ObjectMeta, "gardener.cloud/operation", "rotate-etcd-encryption-key;rotate-ssh-keypair;rotate-ca-start")
+				metav1.SetMetaDataAnnotation(&gardenOld.ObjectMeta, "gardener.cloud/operation", "rotate-etcd-backup-encryption-key;rotate-ssh-keypair")
+				metav1.SetMetaDataAnnotation(&garden.ObjectMeta, "gardener.cloud/operation", "rotate-etcd-backup-encryption-key;rotate-ssh-keypair;rotate-ca-start")
 
 				Expect(p.Update(event.UpdateEvent{ObjectOld: gardenOld, ObjectNew: garden})).To(BeTrue())
 			})
 
 			It("should return false when parallel operations differ only by order in old and new object", func() {
 				gardenOld := garden.DeepCopy()
-				metav1.SetMetaDataAnnotation(&gardenOld.ObjectMeta, "gardener.cloud/operation", "rotate-etcd-encryption-key;rotate-ssh-keypair")
-				metav1.SetMetaDataAnnotation(&garden.ObjectMeta, "gardener.cloud/operation", "rotate-ssh-keypair;rotate-etcd-encryption-key")
+				metav1.SetMetaDataAnnotation(&gardenOld.ObjectMeta, "gardener.cloud/operation", "rotate-etcd-backup-encryption-key;rotate-ssh-keypair")
+				metav1.SetMetaDataAnnotation(&garden.ObjectMeta, "gardener.cloud/operation", "rotate-ssh-keypair;rotate-etcd-backup-encryption-key")
 				metav1.SetMetaDataAnnotation(&garden.ObjectMeta, "foo", "bar")
 
 				Expect(p.Update(event.UpdateEvent{ObjectOld: gardenOld, ObjectNew: garden})).To(BeFalse())

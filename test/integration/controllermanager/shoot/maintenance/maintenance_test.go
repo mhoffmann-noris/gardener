@@ -1859,12 +1859,12 @@ var _ = DescribeTableSubtree("Shoot Maintenance controller tests", func(isCapabi
 				ETCDEncryptionKey: &gardencorev1beta1.MaintenanceRotationConfig{
 					RotationPeriod: ptr.To(metav1.Duration{Duration: time.Hour}),
 				},
-			}, "", "Credentials \"rotate-etcd-encryption-key\": ETCD Encryption key rotation started", "rotate-etcd-encryption-key"),
+			}, "", "Credentials \"rotate-etcd-backup-encryption-key\": ETCD Encryption key rotation started", "rotate-etcd-backup-encryption-key"),
 			Entry("etcd encryption key when encryption key rotation start maintenance operation is set", gardencorev1beta1.MaintenanceCredentialsAutoRotation{
 				ETCDEncryptionKey: &gardencorev1beta1.MaintenanceRotationConfig{
 					RotationPeriod: ptr.To(metav1.Duration{Duration: time.Hour}),
 				},
-			}, "rotate-etcd-encryption-key-start", "Credentials \"rotate-etcd-encryption-key\": ETCD Encryption key rotation started", "rotate-etcd-encryption-key-start"),
+			}, "rotate-etcd-backup-encryption-key-start", "Credentials \"rotate-etcd-backup-encryption-key\": ETCD Encryption key rotation started", "rotate-etcd-backup-encryption-key-start"),
 		)
 
 		It("should auto rotate multiple credentials", func() {
@@ -1893,14 +1893,14 @@ var _ = DescribeTableSubtree("Shoot Maintenance controller tests", func(isCapabi
 				g.Expect(shoot.Status.LastMaintenance.Description).To(And(
 					ContainSubstring("Credentials \"rotate-ssh-keypair\": SSH keypair rotation started"),
 					ContainSubstring("Credentials \"rotate-observability-credentials\": Observability passwords rotation started"),
-					ContainSubstring("Credentials \"rotate-etcd-encryption-key\": ETCD Encryption key rotation started"),
+					ContainSubstring("Credentials \"rotate-etcd-backup-encryption-key\": ETCD Encryption key rotation started"),
 				))
 				g.Expect(shoot.Status.LastMaintenance.State).To(Equal(gardencorev1beta1.LastOperationStateSucceeded))
 				g.Expect(shoot.Status.LastMaintenance.TriggeredTime).To(Equal(metav1.Time{Time: fakeClock.Now()}))
 				g.Expect(shoot.ObjectMeta.Annotations[v1beta1constants.GardenerOperation]).To(And(
 					ContainSubstring("rotate-ssh-keypair"),
 					ContainSubstring("rotate-observability-credentials"),
-					ContainSubstring("rotate-etcd-encryption-key"),
+					ContainSubstring("rotate-etcd-backup-encryption-key"),
 				))
 			}).Should(Succeed())
 		})

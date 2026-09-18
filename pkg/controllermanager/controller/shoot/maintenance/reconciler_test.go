@@ -1573,7 +1573,7 @@ var _ = Describe("Shoot Maintenance", func() {
 				reason:       "Automatic rotation of observability passwords configured",
 				isSuccessful: true,
 			}))
-			Expect(results["rotate-etcd-encryption-key"]).To(Equal(updateResult{
+			Expect(results["rotate-etcd-backup-encryption-key"]).To(Equal(updateResult{
 				description:  "ETCD Encryption key rotation started",
 				reason:       "Automatic rotation of etcd encryption key configured",
 				isSuccessful: true,
@@ -1607,7 +1607,7 @@ var _ = Describe("Shoot Maintenance", func() {
 				reason:       "Automatic rotation of observability passwords configured",
 				isSuccessful: true,
 			}))
-			Expect(results["rotate-etcd-encryption-key"]).To(Equal(updateResult{
+			Expect(results["rotate-etcd-backup-encryption-key"]).To(Equal(updateResult{
 				description:  "ETCD Encryption key rotation started",
 				reason:       "Automatic rotation of etcd encryption key configured",
 				isSuccessful: true,
@@ -1630,7 +1630,7 @@ var _ = Describe("Shoot Maintenance", func() {
 				reason:       "Automatic rotation of observability passwords configured",
 				isSuccessful: true,
 			}))
-			Expect(results["rotate-etcd-encryption-key"]).To(Equal(updateResult{
+			Expect(results["rotate-etcd-backup-encryption-key"]).To(Equal(updateResult{
 				description:  "ETCD Encryption key rotation started",
 				reason:       "Automatic rotation of etcd encryption key configured",
 				isSuccessful: true,
@@ -1650,7 +1650,7 @@ var _ = Describe("Shoot Maintenance", func() {
 			results := computeCredentialsToRotationResults(log, shoot, metav1.Time{Time: now})
 
 			Expect(results).To(HaveLen(1))
-			Expect(results["rotate-etcd-encryption-key"]).To(Equal(updateResult{
+			Expect(results["rotate-etcd-backup-encryption-key"]).To(Equal(updateResult{
 				description:  "Could not start ETCD encryption key rotation",
 				reason:       "ETCD encryption key rotation is already in progress",
 				isSuccessful: false,
@@ -1720,10 +1720,10 @@ var _ = Describe("Shoot Maintenance", func() {
 				}, []string{"reconcile", "rotate-ssh-keypair", "rotate-observability-credentials"}),
 			Entry("should return rotate-observability-credentials operation when it is not part of the result updates", ptr.To("rotate-observability-credentials"),
 				map[string]updateResult{
-					"rotate-etcd-encryption-key": {
+					"rotate-etcd-backup-encryption-key": {
 						isSuccessful: true,
 					},
-				}, []string{"reconcile", "rotate-observability-credentials", "rotate-etcd-encryption-key"}),
+				}, []string{"reconcile", "rotate-observability-credentials", "rotate-etcd-backup-encryption-key"}),
 			Entry("should return appended options when maintenance operation is rotate-ssh-keypair", ptr.To("rotate-ssh-keypair"),
 				map[string]updateResult{
 					"rotate-ssh-keypair": {
@@ -1736,12 +1736,12 @@ var _ = Describe("Shoot Maintenance", func() {
 						isSuccessful: true,
 					},
 				}, []string{"reconcile", "rotate-credentials-start", "rotate-observability-credentials"}),
-			Entry("should not append rotate-etcd-encryption-key when rotate-etcd-encryption-key-start is present in maintenance operations", ptr.To("rotate-etcd-encryption-key-start"),
+			Entry("should not append rotate-etcd-backup-encryption-key when rotate-etcd-backup-encryption-key-start is present in maintenance operations", ptr.To("rotate-etcd-backup-encryption-key-start"),
 				map[string]updateResult{
-					"rotate-etcd-encryption-key": {
+					"rotate-etcd-backup-encryption-key": {
 						isSuccessful: true,
 					},
-				}, []string{"reconcile", "rotate-etcd-encryption-key-start"}),
+				}, []string{"reconcile", "rotate-etcd-backup-encryption-key-start"}),
 			Entry("should return reconcile when all operations in result updates have failed", nil,
 				map[string]updateResult{
 					"rotate-ssh-keypair": {
@@ -1750,7 +1750,7 @@ var _ = Describe("Shoot Maintenance", func() {
 					"rotate-observability-credentials": {
 						isSuccessful: false,
 					},
-					"rotate-etcd-encryption-key": {
+					"rotate-etcd-backup-encryption-key": {
 						isSuccessful: false,
 					},
 				}, []string{"reconcile"}),
@@ -1762,10 +1762,10 @@ var _ = Describe("Shoot Maintenance", func() {
 					"rotate-observability-credentials": {
 						isSuccessful: true,
 					},
-					"rotate-etcd-encryption-key": {
+					"rotate-etcd-backup-encryption-key": {
 						isSuccessful: true,
 					},
-				}, []string{"reconcile", "rotate-observability-credentials", "rotate-etcd-encryption-key"}),
+				}, []string{"reconcile", "rotate-observability-credentials", "rotate-etcd-backup-encryption-key"}),
 			Entry("should return all operations", ptr.To("rotate-credentials-start"),
 				map[string]updateResult{
 					"rotate-ssh-keypair": {
@@ -1774,10 +1774,10 @@ var _ = Describe("Shoot Maintenance", func() {
 					"rotate-observability-credentials": {
 						isSuccessful: true,
 					},
-					"rotate-etcd-encryption-key": {
+					"rotate-etcd-backup-encryption-key": {
 						isSuccessful: true,
 					},
-				}, []string{"reconcile", "rotate-credentials-start", "rotate-ssh-keypair", "rotate-observability-credentials", "rotate-etcd-encryption-key"}),
+				}, []string{"reconcile", "rotate-credentials-start", "rotate-ssh-keypair", "rotate-observability-credentials", "rotate-etcd-backup-encryption-key"}),
 		)
 	})
 
