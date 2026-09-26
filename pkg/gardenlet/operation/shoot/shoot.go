@@ -28,6 +28,7 @@ import (
 	securityv1alpha1 "github.com/gardener/gardener/pkg/apis/security/v1alpha1"
 	"github.com/gardener/gardener/pkg/client/kubernetes"
 	"github.com/gardener/gardener/pkg/component"
+	"github.com/gardener/gardener/pkg/features"
 	vpnseedserver "github.com/gardener/gardener/pkg/component/networking/vpn/seedserver"
 	sharedcomponent "github.com/gardener/gardener/pkg/component/shared"
 	gardenerextensions "github.com/gardener/gardener/pkg/extensions"
@@ -310,6 +311,7 @@ func (b *Builder) Build(ctx context.Context, c client.Reader) (*Shoot, error) {
 
 	if etcd := shoot.GetInfo().Spec.Kubernetes.ETCD; etcd != nil &&
 		etcd.Main != nil &&
+	features.DefaultFeatureGate.Enabled(features.ETCDBackupEncryption) &&
 		etcd.Main.BackupEncryption != nil &&
 		etcd.Main.BackupEncryption.Provider.Type != nil {
 		shoot.BackupEncryptionProvider = *etcd.Main.BackupEncryption.Provider.Type

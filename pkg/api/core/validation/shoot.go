@@ -28,6 +28,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/sets"
+	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/utils/ptr"
@@ -287,6 +288,13 @@ func ValidateShootUpdate(newShoot, oldShoot *core.Shoot) field.ErrorList {
 	allErrs = append(allErrs, validateHibernationUpdate(newShoot, oldShoot)...)
 	allErrs = append(allErrs, ValidateForceDeletion(newShoot, oldShoot)...)
 	allErrs = append(allErrs, ValidateBackupEncryptionRemoval(newShoot, oldShoot)...)
+
+	if !utilfeature.DefaultFeatureGate.Enabled(features.ETCDBackupEncryption) {
+		if newShoot.Spec.Kubernetes.ETCD != nil &&
+			newShoot.Spec.Kubernetes.ETCD.Main.BackupEncryption != nil {
+			allErrs = append(allErrs, field.Forbidden(field.NewPath("spec", "kubernetes", "etcd", "main", "backupEncryption"), "etcd backup encryption is disabled by the ETCDBackupEncryption feature gate"))
+		}
+	}
 	allErrs = append(allErrs, validateNodeLocalDNSUpdate(&newShoot.Spec, &oldShoot.Spec, field.NewPath("spec"))...)
 	allErrs = append(allErrs, ValidateInPlaceUpdates(newShoot, oldShoot)...)
 

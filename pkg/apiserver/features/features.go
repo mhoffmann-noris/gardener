@@ -17,5 +17,6 @@ func RegisterFeatureGates() {
 		features.CloudProfileCapabilities,
 		features.VersionClassificationLifecycle,
 		features.DisableNginxIngressInShoot,
+		features.ETCDBackupEncryption,
 	)))
 }

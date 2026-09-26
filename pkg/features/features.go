@@ -147,6 +147,11 @@ const (
 	// owner: @rfranzke
 	// alpha: v1.142.0
 	BackupEntryForGarden featuregate.Feature = "BackupEntryForGarden"
+
+	// ETCDBackupEncryption enables the usage of encryption for etcd backups.
+	// owner: @gardener
+	// alpha: v1.143.0
+	ETCDBackupEncryption featuregate.Feature = "ETCDBackupEncryption"
 )
 
 // DefaultFeatureGate is the central feature gate map used by all gardener components.
@@ -194,6 +199,7 @@ var AllFeatureGates = map[featuregate.Feature]featuregate.FeatureSpec{
 	DisableNginxIngressInShoot:     {Default: false, PreRelease: featuregate.Alpha},
 	LiveControlPlaneMigration:      {Default: false, PreRelease: featuregate.Alpha},
 	BackupEntryForGarden:           {Default: false, PreRelease: featuregate.Alpha},
+	ETCDBackupEncryption:            {Default: false, PreRelease: featuregate.Alpha},
 }
 
 // GetFeatures returns a feature gate map with the respective specifications. Non-existing feature gates are ignored.

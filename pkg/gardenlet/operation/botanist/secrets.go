@@ -22,6 +22,7 @@ import (
 	securityv1alpha1 "github.com/gardener/gardener/pkg/apis/security/v1alpha1"
 	kubeapiserver "github.com/gardener/gardener/pkg/component/kubernetes/apiserver"
 	"github.com/gardener/gardener/pkg/controllerutils"
+	"github.com/gardener/gardener/pkg/features"
 	"github.com/gardener/gardener/pkg/utils/flow"
 	gardenerutils "github.com/gardener/gardener/pkg/utils/gardener"
 	shootstate "github.com/gardener/gardener/pkg/utils/gardener/shootstate"
@@ -94,7 +95,9 @@ func (b *Botanist) lastSecretRotationStartTimes() map[string]time.Time {
 
 		if shootStatus.Credentials.Rotation.ETCDEncryptionKey != nil && shootStatus.Credentials.Rotation.ETCDEncryptionKey.LastInitiationTime != nil {
 			rotation[v1beta1constants.SecretNameETCDEncryptionKey] = shootStatus.Credentials.Rotation.ETCDEncryptionKey.LastInitiationTime.Time
-			rotation[v1beta1constants.SecretNameGardenerETCDBackupEncryptionKey] = shootStatus.Credentials.Rotation.ETCDEncryptionKey.LastInitiationTime.Time
+			if features.DefaultFeatureGate.Enabled(features.ETCDBackupEncryption) {
+				rotation[v1beta1constants.SecretNameGardenerETCDBackupEncryptionKey] = shootStatus.Credentials.Rotation.ETCDEncryptionKey.LastInitiationTime.Time
+			}
 		}
 	}
 

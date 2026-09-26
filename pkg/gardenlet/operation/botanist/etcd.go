@@ -22,6 +22,7 @@ import (
 	"github.com/gardener/gardener/pkg/apis/utils/timewindow"
 	"github.com/gardener/gardener/pkg/component/etcd/etcd"
 	"github.com/gardener/gardener/pkg/component/shared"
+	"github.com/gardener/gardener/pkg/features"
 	"github.com/gardener/gardener/pkg/gardenlet/operation/shoot"
 	"github.com/gardener/gardener/pkg/utils/flow"
 )
@@ -118,10 +119,14 @@ func (b *Botanist) DeployEtcd(ctx context.Context) error {
 		if b.Shoot.GetInfo().Status.Credentials != nil &&
 			b.Shoot.GetInfo().Status.Credentials.Rotation != nil &&
 			b.Shoot.GetInfo().Status.Credentials.Rotation.ETCDEncryptionKey != nil {
-			b.Shoot.Components.ControlPlane.EtcdMain.SetBackupEncryptionRotationPhase(b.Shoot.GetInfo().Status.Credentials.Rotation.ETCDEncryptionKey.Phase)
+			if features.DefaultFeatureGate.Enabled(features.ETCDBackupEncryption) {
+				b.Shoot.Components.ControlPlane.EtcdMain.SetBackupEncryptionRotationPhase(b.Shoot.GetInfo().Status.Credentials.Rotation.ETCDEncryptionKey.Phase)
+			}
 		}
 
-		b.Shoot.Components.ControlPlane.EtcdMain.SetBackupEncryptionProvider(b.Shoot.BackupEncryptionProvider)
+		if features.DefaultFeatureGate.Enabled(features.ETCDBackupEncryption) {
+			b.Shoot.Components.ControlPlane.EtcdMain.SetBackupEncryptionProvider(b.Shoot.BackupEncryptionProvider)
+		}
 	}
 
 	// Roll out the new peer CA first so that every member in the cluster trusts the old and the new CA.
