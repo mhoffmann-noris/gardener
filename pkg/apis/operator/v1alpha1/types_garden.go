@@ -335,6 +335,9 @@ type Backup struct {
 	// SecretRef is a reference to a Secret object containing the cloud provider credentials for the object store where
 	// backups should be stored. It should have enough privileges to manipulate the objects as well as buckets.
 	SecretRef corev1.LocalObjectReference `json:"secretRef"`
+	// BackupEncryption contains configuration for etcd backup encryption.
+	// +optional
+	BackupEncryption *gardencorev1beta1.BackupEncryptionConfig `json:"backupEncryption,omitempty"`
 }
 
 // Maintenance contains information about the time window for maintenance operations.

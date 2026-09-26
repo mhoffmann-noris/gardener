@@ -320,6 +320,18 @@ string
 <p>SecretRef is a reference to a Secret object containing the cloud provider credentials for the object store where<br />backups should be stored. It should have enough privileges to manipulate the objects as well as buckets.</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>backupEncryption</code></br>
+<em>
+<a href="#backupencryptionconfig">BackupEncryptionConfig</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>BackupEncryption contains configuration for etcd backup encryption.</p>
+</td>
+</tr>
 
 </tbody>
 </table>

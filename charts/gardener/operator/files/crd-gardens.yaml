@@ -502,6 +502,28 @@ spec:
                             description: Backup contains the object store configuration
                               for backups for the virtual garden etcd.
                             properties:
+                              backupEncryption:
+                                description: BackupEncryption contains configuration
+                                  for etcd backup encryption.
+                                properties:
+                                  provider:
+                                    description: Provider contains information about
+                                      the encryption provider.
+                                    properties:
+                                      type:
+                                        description: |-
+                                          Type contains the type of the encryption provider.
+
+                                          Supported types:
+                                            - "aescbc"
+                                            - "aesgcm"
+                                            - "secretbox"
+                                          Defaults to aescbc.
+                                        type: string
+                                    type: object
+                                required:
+                                - provider
+                                type: object
                               bucketName:
                                 description: |-
                                   BucketName is the name of the backup bucket. If not provided, gardener-operator attempts to manage a new bucket.

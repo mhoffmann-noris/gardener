@@ -142,6 +142,11 @@ func (in *Backup) DeepCopyInto(out *Backup) {
 		**out = **in
 	}
 	out.SecretRef = in.SecretRef
+	if in.BackupEncryption != nil {
+		in, out := &in.BackupEncryption, &out.BackupEncryption
+		*out = new(v1beta1.BackupEncryptionConfig)
+		(*in).DeepCopyInto(*out)
+	}
 	return
 }
 

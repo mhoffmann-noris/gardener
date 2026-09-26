@@ -44,6 +44,11 @@ spec:
           provider: local
           secretRef:
             name: virtual-garden-etcd-main-backup-local
+          # Uncomment to enable backup encryption for the virtual garden etcd.
+          # Requires the ETCDBackupEncryption feature gate (currently Alpha).
+          # backupEncryption:
+          #   provider:
+          #     type: aesgcm  # aesgcm | aescbc | secretbox
         storage:
           capacity: 25Gi
       events:

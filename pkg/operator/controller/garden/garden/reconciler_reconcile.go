@@ -953,6 +953,18 @@ func (r *Reconciler) deployEtcdsFunc(garden *operatorv1alpha1.Garden, etcdMain, 
 				FullSnapshotSchedule: snapshotSchedule,
 				LeaderElection:       backupLeaderElection,
 			})
+
+			// Wire up backup encryption if the feature gate is enabled and the
+			// backupEncryption field is set on the Garden spec.
+			if features.DefaultFeatureGate.Enabled(features.ETCDBackupEncryption) && backup.BackupEncryption != nil && backup.BackupEncryption.Provider.Type != nil {
+				etcdMain.SetBackupEncryptionProvider(*backup.BackupEncryption.Provider.Type)
+
+				if garden.Status.Credentials != nil &&
+					garden.Status.Credentials.Rotation != nil &&
+					garden.Status.Credentials.Rotation.ETCDEncryptionKey != nil {
+					etcdMain.SetBackupEncryptionRotationPhase(garden.Status.Credentials.Rotation.ETCDEncryptionKey.Phase)
+				}
+			}
 		}
 
 		// Roll out the new peer CA first so that every member in the cluster trusts the old and the new CA.
